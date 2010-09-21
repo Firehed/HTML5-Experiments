@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<title></title>
+		<style type="text/css" media="screen">
+			#track { margin: 0 auto;}
+			#track, #trackinfo {
+				display: block;
+				text-align: center;
+			}
+		</style>
+	</head>
+	<body>
+		<progress id="track" value="0" style="width:600px;text-align:center"></progress>
+		<div id="trackinfo"></div>
+		<br />
+		<a class="playlink" href="#" data-src="file:///Users/firehed/Downloads/Hurry! A Final Fantasy X Impossible ReMix Album/01_-_FFX_Hurry _-_DarkeSword_-_Time_Slips_Away.mp3">FFX Remix - Time Slips Away</a>
+		<br />
+		<a class="playlink" href="#" data-src="file:///Users/firehed/Music/iTunes/iTunes Music/Music/Masato Nakamura/Sonic the Hedgehog OST/01 Title Screen.mp3">Sonic OST - Title Screen</a>
+		
+		<button id="playpause" type="button">Play/Pause</button>
+		<audio id="audio"></audio>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js" type="text/javascript"></script>
+		<script>
+			var audio = $("#audio");
+			var trackinfo = $("#trackinfo");
+			
+			
+			var p = document.getElementById('track');
+			$(".playlink").click(function() {
+				$("#audio").attr('src', $(this).attr('data-src')).trigger('play');
+			});
+			$("#audio").bind('loadedmetadata', function() {
+				$("#track").attr('max', $("#audio").attr('duration'));
+			});
+			$("#playpause").click(function() {
+				if (audio.attr('paused')) {
+					audio.trigger('play');
+				}
+				else {
+					audio.trigger('pause');
+				}
+			});
+			
+			var t = window.setInterval(function() {
+				document.getElementById('track').value = document.getElementById('audio').currentTime;
+				sec = Math.floor(audio.attr('currentTime'));
+				duration = Math.round(audio.attr('duration'));
+				currentMin = Math.floor(sec/60);
+				currentSec = sec%60;
+				totalMin = Math.floor(duration/60);
+				totalSec = duration%60;
+				if (currentSec.toString().length == 1) currentSec = '0' + currentSec; // leading 0
+				if (totalSec.toString().length == 1) totalSec = '0' + totalSec; // leading 0
+				
+				trackinfo.text(currentMin + ':' + currentSec + ' / ' + totalMin + ':' + totalSec);
+				
+			}, 40);
+			
+		</script>
+	</body>
+</html>
